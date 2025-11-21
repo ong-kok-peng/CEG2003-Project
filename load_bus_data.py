@@ -17,7 +17,7 @@ FILE_ACCIDENTS_MERGED = "./cleaned_datasets/Traffic Accident Database 2024 Clean
 # =========================
 def load_driver_metrics_data():
     df_list = []
-    max_no_rows = 1500
+    max_no_rows = 2500
 
     mar24_excel_file1_sheets = pd.read_excel(FILE_MAR24_PART1, sheet_name=None)
     for sheet_name, sheet_df in mar24_excel_file1_sheets.items():
@@ -119,10 +119,10 @@ def main():
     inspect_data(filtered_metrics_df, filtered_accidents_df)
 
     if len(filtered_metrics_df) > 0 and len(filtered_accidents_df) > 0:
-        filtered_metrics_df.to_csv(FILE_MAR24_MERGED, index=False)
+        filtered_metrics_df.to_csv(FILE_MAR24_MERGED, encoding='utf-8', index=False)
         print(f"\nSaved {FILE_MAR24_MERGED} .")
 
-        filtered_accidents_df.to_csv(FILE_ACCIDENTS_MERGED, index=False)
+        filtered_accidents_df.to_csv(FILE_ACCIDENTS_MERGED, encoding='utf-8', index=False)
         print(f"\nSaved {FILE_ACCIDENTS_MERGED} .")
 
         print("\nDone. You can open the CSVs in Excel to inspect.")
