@@ -15,13 +15,12 @@ FILE_ACCIDENTS_MERGED = "./cleaned_datasets/Traffic Accident Database 2024 Clean
 # =========================
 # 2. LOAD METRICS DATA
 # =========================
-def load_driver_metrics_data():
+def load_driver_metrics_data(max_no_rows_per_sheet):
     df_list = []
-    max_no_rows = 2500
 
     mar24_excel_file1_sheets = pd.read_excel(FILE_MAR24_PART1, sheet_name=None)
     for sheet_name, sheet_df in mar24_excel_file1_sheets.items():
-        sheet_df = sheet_df.head(max_no_rows)
+        sheet_df = sheet_df.sample(n=max_no_rows_per_sheet)
         sheet_df.columns = (sheet_df.columns.str.strip().str.lower().str.replace(' ', '_', regex=True))
         sheet_df["driver"] = sheet_df["driver"].astype('string')
         sheet_df = sheet_df[sheet_df["driver"] != ""].copy()
@@ -31,7 +30,7 @@ def load_driver_metrics_data():
 
     mar24_excel_file2_sheets = pd.read_excel(FILE_MAR24_PART2, sheet_name=None)
     for sheet_name, sheet_df in mar24_excel_file2_sheets.items():
-        sheet_df = sheet_df.head(max_no_rows)
+        sheet_df = sheet_df.sample(n=max_no_rows_per_sheet)
         sheet_df.columns = (sheet_df.columns.str.strip().str.lower().str.replace(' ', '_', regex=True))
         sheet_df["driver"] = sheet_df["driver"].astype('string')
         sheet_df = sheet_df[sheet_df["driver"] != ""].copy()
@@ -104,8 +103,13 @@ def inspect_data(metrics_df, accidents_df):
 # MAIN
 # =========================
 def main():
-    raw_metrics_df = load_driver_metrics_data()
-    print(f"\nThe entire excel file has {len(raw_metrics_df)} alarm event instances with valid driver ID rows.\n")
+    #randomly sample 50000 rows from the entire file_mar24 excel
+    max_no_rows_whole = 50000
+    no_of_sheets = 6
+    max_no_rows_per_sheet = np.rint(max_no_rows_whole / no_of_sheets).astype(np.uint64)
+
+    raw_metrics_df = load_driver_metrics_data(max_no_rows_per_sheet)
+    print(f"\nSampled {len(raw_metrics_df)} rows out of {max_no_rows_whole} with valid driver ID.\n")
 
     selected_metrics_columns = ["driver", "alarm_type", "alarm_duration"]
     filtered_metrics_df = filter_driver_metrics_columns(selected_metrics_columns, raw_metrics_df)
