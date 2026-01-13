@@ -1,4 +1,4 @@
-<h2>CEG2003 Project: Traffic Accident Data Visualization</h2>
+<h2>CEG2003 Instrumentation and Data Analytics Project: Bus Traffic Accident Data Analysis</h2>
 <h2>Usage</h2>
 <p>Clone or download zip and unzip.</p>
 <p>On the repo root, create new folder called "raw_datasets".</p>
